@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ការ៉ិមពីអតិថិជន - ហាងតែធម្មជាតិ</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== Hero ===== */
+        .reviews-hero {
+            background: linear-gradient(135deg, #1b5e20, #4caf50, #81c784);
+            color: white;
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .reviews-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: heroFloat 15s ease-in-out infinite;
+        }
+        @keyframes heroFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+        .reviews-hero h1 {
+            font-family: 'Moul', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .reviews-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== ស្ថិតិការ៉ិមរួម ===== */
+        .rating-summary {
+            max-width: 900px;
+            margin: -30px auto 30px;
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(27,94,32,0.12);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+        .rating-big {
+            text-align: center;
+            min-width: 160px;
+        }
+        .rating-big .big-number {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #1b5e20;
+            line-height: 1;
+        }
+        .rating-big .big-stars {
+            font-size: 1.8rem;
+            margin: 5px 0;
+        }
+        .rating-big .big-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .rating-bars {
+            flex: 1;
+            min-width: 250px;
+        }
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .rating-bar-row .bar-label {
+            min-width: 45px;
+            font-size: 0.85rem;
+            color: #4f5d4f;
+            text-align: right;
+        }
+        .rating-bar-row .bar-track {
+            flex: 1;
+            height: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .rating-bar-row .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+            border-radius: 5px;
+            transition: width 0.8s ease;
+        }
+        .rating-bar-row .bar-count {
+            min-width: 35px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* ===== តម្រងការ៉ិម ===== */
+        .filter-bar {
+            max-width: 900px;
+            margin: 0 auto 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid #c8e6c9;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Khmer', sans-serif;
+            font-size: 0.9rem;
+            color: #2e7d32;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #2e7d32;
+            color: white;
+            border-color: #2e7d32;
+        }
+
+        /* ===== បញ្ជីការ៉ិម ===== */
+        .reviews-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 20px 30px;
+        }
+        .review-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border-left: 5px solid #4caf50;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(27,94,32,0.12);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .review-card:nth-child(1) { animation-delay: 0.05s; }
+        .review-card:nth-child(2) { animation-delay: 0.1s; }
+        .review-card:nth-child(3) { animation-delay: 0.15s; }
+        .review-card:nth-child(4) { animation-delay: 0.2s; }
+        .review-card:nth-child(5) { animation-delay: 0.25s; }
+        .review-card:nth-child(6) { animation-delay: 0.3s; }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #c8e6c9;
+        }
+        .review-meta {
+            flex: 1;
+        }
+        .review-meta .review-name {
+            font-weight: bold;
+            color: #1b5e20;
+            font-size: 1.05rem;
+            margin-bottom: 2px;
+        }
+        .review-meta .review-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .review-stars {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .review-stars .star-on { color: #ffc107; }
+        .review-stars .star-off { color: #ddd; }
+        .review-product {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+        .review-text {
+            color: #333;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+        .review-img-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .review-img-row img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 2px solid #e8f5e9;
+        }
+        .review-img-row img:hover {
+            transform: scale(1.08);
+            border-color: #4caf50;
+        }
+        .review-helpful {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .helpful-btn {
+            background: none;
+            border: 1px solid #c8e6c9;
+            padding: 5px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #2e7d32;
+            font-family: 'Khmer', sans-serif;
+            transition: all 0.3s;
+        }
+        .helpful-btn:hover, .helpful-btn.voted {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        .helpful-btn.voted {
+            font-weight: bold;
+        }
+        .report-btn {
+            background: none;
+            border: none;
+            color: #bbb;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Khmer', sans-serif;
+        }
+        .report-btn:hover { color: #c62828; }
+
+        /* ===== ទម្រង់សរសេរការ៉ិម ===== */
+        .write-review-section {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .write-review-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 6px 25px rgba(27,94,32,0.1);
+            border: 2px solid #c8e6c9;
+        }
+        .write-review-card h2 {
+            font-family: 'Moul', cursive;
+            color: #1b5e20;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #4f5d4f;
+            font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #c8e6c9;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Khmer', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafffe;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76,175,80,0.15);
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* ===== ជ្រើសរើសផ្កាយ ===== */
+        .star-rating-input {
+            display: flex;
+            gap: 5px;
+            direction: rtl;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+        }
+        .star-rating-input input { display: none; }
+        .star-rating-input label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .star-rating-input label:hover,
+        .star-rating-input label:hover ~ label,
+        .star-rating-input input:checked ~ label {
+            color: #ffc107;
+            transform: scale(1.15);
+        }
+
+        .submit-review-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            padding: 14px;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Moul', cursive;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(46,125,50,0.3);
+        }
+        .submit-review-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46,125,50,0.4);
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 25px;
+            color: #4f5d4f;
+            font-size: 1rem;
+        }
+        .login-prompt a {
+            color: #2e7d32;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* ===== Lightbox រូបភាព ===== */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-overlay img {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        /* ===== គ្មានការ៉ិម ===== */
+        .no-reviews {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 600px) {
+            .rating-summary { flex-direction: column; gap: 20px; padding: 20px; }
+            .reviews-hero h1 { font-size: 1.8rem; }
+            .review-card { padding: 18px; }
+            .review-header { gap: 10px; }
+            .review-avatar { width: 40px; height: 40px; }
+            .write-review-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">ហាងតែធម្មជាតិ</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="services.html">PRICE AND MENU</a></li>
+                <li><a href="reviews.html" style="color:#4caf50; border-bottom:2px solid #4caf50;">⭐ REVIEWS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li id="nav-login-item" style="display:none;"><a href="login.html" class="nav-login-btn">ចូលប្រើប្រាស់</a></li>
+                <li id="nav-logout-item" style="display:none;"><span class="nav-user-info" id="nav-user-name"></span><a href="#" class="nav-logout-btn" onclick="doLogout(event)">ចាកចេញ</a></li>
+                <li id="nav-myorders-item" style="display:none;"><a href="my-orders.html" class="nav-login-btn" style="background:#1565c0;">📦 ការបញ្ជាទិញ</a></li>
+                <li id="nav-admin-item" style="display:none;"><a href="admin-dashboard.html" class="nav-login-btn" style="background-color:#1b5e20;">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <!-- Hero -->
+        <section class="reviews-hero">
+            <h1>⭐ ការ៉ិមពីអតិថិជន</h1>
+            <p>ស្តាប់មតិពីអតិថិជនដែរបានសាកល្បងតែរបស់យើង និងចែករំលែកបទពិសោធរបស់អ្នកផង!</p>
+        </section>
+
+        <!-- ស្ថិតិការ៉ិមរួម -->
+        <section class="rating-summary" id="ratingSummary"></section>
+
+        <!-- តម្រង -->
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterReviews('all', this)">ទាំងអស់</button>
+            <button class="filter-btn" onclick="filterReviews(5, this)">⭐⭐⭐⭐⭐</button>
+            <button class="filter-btn" onclick="filterReviews(4, this)">⭐⭐⭐⭐</button>
+            <button class="filter-btn" onclick="filterReviews(3, this)">⭐⭐⭐</button>
+            <button class="filter-btn" onclick="filterReviews(2, this)">⭐⭐</button>
+            <button class="filter-btn" onclick="filterReviews(1, this)">⭐</button>
+        </div>
+
+        <!-- បញ្ជីការ៉ិម -->
+        <div class="reviews-grid" id="reviewsGrid"></div>
+
+        <!-- សរសេរការ៉ិម -->
+        <div class="write-review-section">
+            <div class="write-review-card">
+                <h2>✍️ ទុកការ៉ិមរបស់អ្នក</h2>
+                <div id="reviewFormContent">
+                    <!-- បំពេញដោយ JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Natural Tea Shop. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+    </footer>
+
+    <script>
+        // ===== ទិន្នន័យការ៉ិមលំនាំដើម =====
+        const defaultReviews = [
+            {
+                id: 'r1', name: 'សុខា ភិន', avatar: 'https://picsum.photos/seed/sokha/100/100',
+                rating: 5, product: 'តែបូបា', date: '១៨/០៨/២០២៦',
+                text: 'តែបូបារបស់ហាងនេះពិតជាមានរសជាតិល្អខ្លាំងណាស់! គ្រាប់បូបារទន់ និងខ្នុរជាតិផ្អែមល្មម មិនហិរោទីពេកទេ។ ខ្ញុំចូលចិត្តណាស់ នឹងមកទិញម្ដងទៀត!',
+                images: ['https://picsum.photos/seed/boba1/200/200', 'https://picsum.photos/seed/boba2/200/200'],
+                helpful: 12, voted: false
+            },
+            {
+                id: 'r2', name: 'វណ្ណៈ សុីម', avatar: 'https://picsum.photos/seed/vannak/100/100',
+                rating: 4, product: 'តែផ្កាម្រេច', date: '១៥/០៨/២០២៦',
+                text: 'តែផ្កាម្រេចមានក្លិនក្រអូក និងរសជាតិស្រស់ដូចផ្កាម្រេចពិតប្រាកដ។ ខ្ញុំញ៉ាំរាល់ព្រឹក វាជួយឲ្យចិត្តស្ងប់។ តែល្អណាស់!',
+                images: ['https://picsum.photos/seed/jasmine1/200/200'],
+                helpful: 8, voted: false
+            },
+            {
+                id: 'r3', name: 'ចន្ទា រ៉ាយ', avatar: 'https://picsum.photos/seed/chanda/100/100',
+                rating: 5, product: 'ម៉ាឆាឡាតេ', date: '១២/០៨/២០២៦',
+                text: 'ម៉ាឆាឡាតេនេះគឺជាការ៉ិមឆ្ងាញបំផុតដែរខ្ញុំធ្លាប់ញ៉ាំ! រសជាតិតែបៃតងខ្លាំង លាយនឹងទឹកដោះគោយ៉ាងល្អ។ តម្លៃក៏សមរម្យផង។ សូមអរគុណហាងតែធម្មជាតិ!',
+                images: ['https://picsum.photos/seed/matcha1/200/200', 'https://picsum.photos/seed/matcha2/200/200', 'https://picsum.photos/seed/matcha3/200/200'],
+                helpful: 20, voted: false
+            },
+            {
+                id: 'r4', name: 'ស្រី ល័ង', avatar: 'https://picsum.photos/seed/sreyleap/100/100',
+                rating: 3, product: 'តែស្វាយ', date: '១០/០៨/២០២៦',
+                text: 'តែស្វាយក៏មានរសជាតិល្អដែរ ប៉ុន្តែរសស្វាយអាចក្រអូមជាងនេះបន្តិចទេ។ បើសិនជាឡើងជាតិស្វាយថ្លោងៗ វានឹងកាន់តែឆ្ងាញ។ សូមពិចារណាឡើងវិញ!',
+                images: [],
+                helpful: 3, voted: false
+            },
+            {
+                id: 'r5', name: 'ព្រំ សុភា', avatar: 'https://picsum.photos/seed/phanith/100/100',
+                rating: 5, product: 'តែទឹកឃ្មុំល្មុង', date: '០៨/០៨/២០២៦',
+                text: 'តែទឹកឃ្មុំល្មុងគឺជាតែដែរខ្ញុំចូលចិត្តបំផុត! វាជួយឲ្យខ្ញុំគេងបានល្អ និងមានអារម្មណ៍ស្រស់ថ្លាន់ក្នុងពេលព្រឹក។ សូមអរគុណហាងតែធម្មជាតិសម្រាប់តែគុណភាពខ្ពស់!',
+                images: ['https://picsum.photos/seed/honey1/200/200'],
+                helpful: 15, voted: false
+            },
+            {
+                id: 'r6', name: 'ដារា កឹម', avatar: 'https://picsum.photos/seed/dara/100/100',
+                rating: 4, product: 'តែបៃតង', date: '០៥/០៨/២០២៦',
+                text: 'តែបៃតងនេះមានរសជាតិស្រស់ និងមិនមានជាតិស្ករខ្ពស់ពេកទេ។ ល្អសម្រាប់អ្នកដែរចង់ថែរក្សាសុខភាព។ ខ្ញុំសំណើឲ្យបន្ថែមទំហំធំជាងនេះ!',
+                images: [],
+                helpful: 7, voted: false
+            },
+            {
+                id: 'r7', name: 'ម៉េង ហុក', avatar: 'https://picsum.photos/seed/meng/100/100',
+                rating: 5, product: 'តែបន្សំ', date: '០៣/០៨/២០២៦',
+                text: 'តែបន្សំគឺពិតជាជួយដល់រាងកាយខ្ញុំច្រើនណាស់! បន្ទាប់ពីផឹកអស់មួយអាទិត្យ ខ្ញុំមានអារម្មណ៍ស្រស់ និងគេងបានល្អ។ គុណភាពល្អមែនទេ!',
+                images: ['https://picsum.photos/seed/detox1/200/200', 'https://picsum.photos/seed/detox2/200/200'],
+                helpful: 10, voted: false
+            },
+            {
+                id: 'r8', name: 'ញ៉ាម សុធារ៉ា', avatar: 'https://picsum.photos/seed/nyam/100/100',
+                rating: 4, product: 'តែផ្លែឈើ', date: '០១/០៨/២០២៦',
+                text: 'តែផ្លែឈើមានរសជាតិក្រអូក និងស្រស់។ ខ្ញុំចូលចិត្តរសជាតិផ្លែប៉ោមប៉ូមជាមួយនឹងតែបៃតង។ វាជាជម្រើសល្អសម្រាប់រដូវក្តៅ!',
+                images: [],
+                helpful: 5, voted: false
+            }
+        ];
+
+        // ===== ផ្ទុកទិន្នន័យ =====
+        if (!localStorage.getItem('ntReviews')) {
+            localStorage.setItem('ntReviews', JSON.stringify(defaultReviews));
+        }
+        let reviews = JSON.parse(localStorage.getItem('ntReviews') || '[]');
+        function saveReviews() { localStorage.setItem('ntReviews', JSON.stringify(reviews)); }
+
+        // ===== គណនាស្ថិតិ =====
+        function calcStats() {
+            const total = reviews.length;
+            if (total === 0) return { avg: 0, total: 0, counts: {5:0,4:0,3:0,2:0,1:0} };
+            const counts = {5:0,4:0,3:0,2:0,1:0};
+            let sum = 0;
+            reviews.forEach(r => { counts[r.rating] = (counts[r.rating]||0) + 1; sum += r.rating; });
+            return { avg: (sum/total).toFixed(1), total, counts };
+        }
+
+        // ===== បង្ហាញស្ថិតិ =====
+        function renderSummary() {
+            const s = calcStats();
+            const starsHTML = (n) => {
+                let h = '';
+                for (let i=1;i<=5;i++) h += `<span class="${i<=Math.round(n)?'star-on':'star-off'}">★</span>`;
+                return h;
+            };
+            const pct = (star) => s.total > 0 ? ((s.counts[star]||0)/s.total*100).toFixed(0) : 0;
+
+            document.getElementById('ratingSummary').innerHTML = `
+                <div class="rating-big">
+                    <div class="big-number">${s.avg}</div>
+                    <div class="big-stars" style="color:#ffc107;">${starsHTML(s.avg)}</div>
+                    <div class="big-count">${s.total} ការ៉ិម</div>
+                </div>
+                <div class="rating-bars">
+                    ${[5,4,3,2,1].map(star => `
+                        <div class="rating-bar-row">
+                            <span class="bar-label">${star} ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width:${pct(star)}%"></div></div>
+                            <span class="bar-count">${s.counts[star]||0}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ===== បង្ហាញការ៉ិម =====
+        let currentFilter = 'all';
+
+        function renderReviews() {
+            reviews = JSON.parse(localStorage.getItem('ntReviews') || '[]');
+            const grid = document.getElementById('reviewsGrid');
+            const filtered = currentFilter === 'all' ? reviews : reviews.filter(r => r.rating === currentFilter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-reviews">📭 មិនទាន់មានការ៉ិមសម្រាប់ការពិន្ធនេះទេ</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(r => {
+                const starsHTML = Array.from({length:5}, (_,i) =>
+                    `<span class="${i < r.rating ? 'star-on' : 'star-off'}">★</span>`
+                ).join('');
+
+                const imgHTML = (r.images && r.images.length > 0) ?
+                    `<div class="review-img-row">${r.images.map(img =>
+                        `<img src="${img}" alt="រូបភាពការ៉ិម" onclick="openLightbox('${img.replace(/'/g, "\\'")}')" loading="lazy">`
+                    ).join('')}</div>` : '';
+
+                return `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img class="review-avatar" src="${r.avatar}" alt="${r.name}" loading="lazy">
+                            <div class="review-meta">
+                                <div class="review-name">${r.name}</div>
+                                <div class="review-date">${r.date}</div>
+                            </div>
+                            <div class="review-stars">${starsHTML}</div>
+                        </div>
+                        <span class="review-product">🍵 ${r.product}</span>
+                        <p class="review-text">${r.text}</p>
+                        ${imgHTML}
+                        <div class="review-helpful">
+                            <button class="helpful-btn ${r.voted ? 'voted' : ''}" onclick="voteHelpful('${r.id}', this)">👍 មានប្រយោជន៍ (${r.helpful})</button>
+                            <button class="report-btn" onclick="reportReview('${r.id}')">⚠️ រាយការណ៍</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== តម្រង =====
+        function filterReviews(val, btn) {
+            currentFilter = val;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderReviews();
+        }
+
+        // ===== បោះឆ្នោតមានប្រយោជន៍ =====
+        function voteHelpful(id, btn) {
+            const idx = reviews.findIndex(r => r.id === id);
+            if (idx < 0) return;
+            if (reviews[idx].voted) {
+                reviews[idx].helpful--;
+                reviews[idx].voted = false;
+                btn.classList.remove('voted');
+            } else {
+                reviews[idx].helpful++;
+                reviews[idx].voted = true;
+                btn.classList.add('voted');
+            }
+            saveReviews();
+            renderReviews();
+        }
+
+        // ===== រាយការណ៍ =====
+        function reportReview(id) {
+            if (confirm('តើអ្នកពិតជាចង់រាយការណ៍ការ៉ិមនេះមែនទេ?')) {
+                alert('✅ អរគុណសម្រាប់ការរាយការណ៍។ យើងនឹងពិនិត្យការ៉ិមនេះ។');
+            }
+        }
+
+        // ===== Lightbox =====
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // ===== ទម្រង់សរសេរការ៉ិម =====
+        function renderForm() {
+            const logged = localStorage.getItem('isLoggedIn') === 'true';
+            const user = localStorage.getItem('currentUser');
+            const container = document.getElementById('reviewFormContent');
+
+            if (!logged) {
+                container.innerHTML = `
+                    <div class="login-prompt">
+                        📝 សូម<a href="login.html">ចូលប្រើប្រាស់</a>មុនពេលទុកការ៉ិម
+                    </div>
+                `;
+                return;
+            }
+
+            const productList = ['តែទឹកឃ្មុំល្មុង','តែផ្កាម្រេច','តែបូបា','តែផ្លែឈើ','តែបន្សំ','តែបៃតង','តែទឹកដោះគោ','តែស្វាយ','ម៉ាឆាឡាតេ','តែផ្ការ័សី'];
+
+            container.innerHTML = `
+                <div class="form-group" style="text-align:center;">
+                    <label style="display:block; margin-bottom:8px;">ជ្រើសរើសផ្កាយ:</label>
+                    <div class="star-rating-input">
+                        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ឈ្មោះ:</label>
+                        <input type="text" id="rvName" value="${user ? user.split('@')[0] : ''}" placeholder="ឈ្មោះរបស់អ្នក">
+                    </div>
+                    <div class="form-group">
+                        <label>ផលិតផល:</label>
+                        <select id="rvProduct">
+                            ${productList.map(p => `<option value="${p}">${p}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ការ៉ិមរបស់អ្នក:</label>
+                    <textarea id="rvText" placeholder="សរសេរការ៉ិមរបស់អ្នកនៅទីនេះ..."></textarea>
+                </div>
+                <button class="submit-review-btn" onclick="submitReview()">🍵 បញ្ជូនការ៉ិម</button>
+            `;
+        }
+
+        // ===== បញ្ជូនការ៉ិម =====
+        function submitReview() {
+            const ratingEl = document.querySelector('input[name="rating"]:checked');
+            const name = document.getElementById('rvName').value.trim();
+            const product = document.getElementById('rvProduct').value;
+            const text = document.getElementById('rvText').value.trim();
+
+            if (!ratingEl) { alert('⭐ សូមជ្រើសរើសផ្កាយមុនពេលបញ្ជូន!'); return; }
+            if (!name) { alert('⚠️ សូមបញ្ចូលឈ្មោះរបស់អ្នក!'); return; }
+            if (!text) { alert('⚠️ សូមសរសេរការ៉ិមមុនពេលបញ្ជូន!'); return; }
+
+            const rating = parseInt(ratingEl.value);
+            const now = new Date();
+            const khmerDate = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+
+            const newReview = {
+                id: 'r' + Date.now(),
+                name,
+                avatar: `https://picsum.photos/seed/${Date.now()}/100/100`,
+                rating,
+                product,
+                date: khmerDate,
+                text,
+                images: [],
+                helpful: 0,
+                voted: false
+            };
+
+            reviews.unshift(newReview);
+            saveReviews();
+            renderSummary();
+            renderReviews();
+            renderForm();
+
+            // រំលឹក
+            alert('✅ អរគុណសម្រាប់ការ៉ិមរបស់អ្នក!');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== Nav Auth =====
+        (function() {
+            const logged = localStorage.getItem('isLoggedIn') === 'true';
+            const role = localStorage.getItem('userRole');
+            const user = localStorage.getItem('currentUser');
+
+            if (logged && user) {
+                document.getElementById('nav-user-name').textContent = user.split('@')[0];
+                document.getElementById('nav-logout-item').style.display = 'inline-block';
+                document.getElementById('nav-login-item').style.display = 'none';
+                if (role === 'admin') {
+                    document.getElementById('nav-admin-item').style.display = 'inline-block';
+                }
+                document.getElementById('nav-myorders-item').style.display = 'inline-block';
+            } else {
+                document.getElementById('nav-login-item').style.display = 'inline-block';
+                document.getElementById('nav-logout-item').style.display = 'none';
+                document.getElementById('nav-myorders-item').style.display = 'none';
+                document.getElementById('nav-admin-item').style.display = 'none';
+            }
+        })();
+
+        function doLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('currentUser');
+            alert('ចាកចេញជោគជ័យ!');
+            window.location.href = 'login.html';
+        }
+
+        // ===== ផ្ទុកទិន្នន័យលើកដំបូង =====
+        renderSummary();
+        renderReviews();
+        renderForm();
+    </script>
+</body>
+</html>

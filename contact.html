@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ទំនាក់ទំនង - Natural Tea Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">ហាងតែធម្មជាតិ</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="services.html">PRICE AND MENU</a></li>
+                <li><a href="reviews.html">⭐ REVIEWS</a></li>
+                <li><a href="contact.html" class="active">CONTACT</a></li>
+                <li id="nav-login-item"><a href="login.html" class="nav-login-btn">ចូលប្រើប្រាស់</a></li>
+                <li id="nav-logout-item" style="display:none;"><span class="nav-user-info" id="nav-user-name"></span><a href="#" class="nav-logout-btn" onclick="doLogout(event)">ចាកចេញ</a></li>
+                <li id="nav-admin-item" style="display:none;"><a href="admin-dashboard.html" class="nav-login-btn" style="background-color:#1b5e20;">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="inner-section">
+            <h2 class="section-title">ទំនាក់ទំនង</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h3 style="color: #2e7d32; margin-bottom: 15px; font-family: 'Moul', cursive;">ព័ត៌មានទំនាក់ទំនង</h3>
+                    <p>📍 អាសយដ្ឋាន: ភ្នំពេញ ខេមរភូមិន្ទ</p>
+                    <p>📞 ទូរស័ព្ទ: +855 12 345 678</p>
+                    <p>📧 អ៊ីមែល: info@naturalteashop.com</p>
+                    <p>⏰ ម៉ោងបើក: ថ្ងៃច័ន្ទ - ថ្ងៃអាទិត្យ (7:00 - 21:00)</p>
+                </div>
+                <div class="contact-form">
+                    <h3 style="color: #2e7d32; margin-bottom: 15px; font-family: 'Moul', cursive;">ផ្ញើសារមកយើង</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">ឈ្មោះ:</label>
+                            <input type="text" id="name" placeholder="បញ្ចូលឈ្មោះរបស់អ្នក" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cemail">អ៊ីមែល:</label>
+                            <input type="email" id="cemail" placeholder="example@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cmsg">សារ:</label>
+                            <textarea id="cmsg" rows="4" placeholder="សរសេរសាររបស់អ្នកទីនេះ..." required></textarea>
+                        </div>
+                        <button type="submit" class="auth-btn">ផ្ញើសារ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Natural Tea Shop. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+    </footer>
+
+    <script>
+        (function() {
+            const logged = localStorage.getItem('isLoggedIn') === 'true';
+            const role = localStorage.getItem('userRole');
+            const user = localStorage.getItem('currentUser');
+
+            if (logged) {
+                document.getElementById('nav-login-item').style.display = 'none';
+                document.getElementById('nav-logout-item').style.display = 'inline-flex';
+                document.getElementById('nav-user-name').textContent = user ? user.split('@')[0] : '';
+                if (role === 'admin') {
+                    document.getElementById('nav-admin-item').style.display = 'inline-flex';
+                }
+            }
+        })();
+
+        function doLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('currentUser');
+            alert('ចាកចេញជោគជ័យ!');
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('សាររបស់អ្នកត្រូវបានផ្ញើដោយជោគជ័យ! សូមអរគុណ។');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

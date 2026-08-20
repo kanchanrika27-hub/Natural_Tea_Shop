@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ការបញ្ជាទិញរបស់ខ្ញុំ - Natural Tea Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .orders-wrapper { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .orders-title { font-family: 'Moul', cursive; color: #2e7d32; text-align: center; margin-bottom: 25px; font-size: 1.5rem; }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 18px;
+            overflow: hidden;
+            border-left: 5px solid #2e7d32;
+            transition: transform 0.3s;
+        }
+        .order-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .order-card.status-processing { border-left-color: #ff9800; }
+        .order-card.status-shipping { border-left-color: #2196f3; }
+        .order-card.status-delivered { border-left-color: #4caf50; }
+        .order-card.status-pending { border-left-color: #ff9800; }
+
+        .order-card-header {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .order-card-header h3 { margin: 0; color: #1b5e20; font-size: 1rem; }
+        .order-card-header .order-date { color: #888; font-size: 0.85rem; }
+
+        .order-status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .badge-processing { background: #fff3e0; color: #e65100; }
+        .badge-shipping { background: #e3f2fd; color: #1565c0; }
+        .badge-delivered { background: #e8f5e9; color: #2e7d32; }
+        .badge-pending { background: #fff3e0; color: #e65100; }
+        .badge-completed { background: #e8f5e9; color: #2e7d32; }
+
+        .order-card-body { padding: 15px 20px; }
+        .order-info-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; border-bottom: 1px solid #f5f5f5; }
+        .order-info-row:last-child { border-bottom: none; }
+        .order-info-label { color: #4f5d4f; font-weight: bold; }
+        .order-info-value { color: #2e7d32; }
+
+        .order-items-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        .order-items-table th { background: #e8f5e9; color: #1b5e20; padding: 6px 10px; text-align: left; font-size: 0.8rem; }
+        .order-items-table td { padding: 6px 10px; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem; }
+
+        .order-card-footer { padding: 10px 20px; background: #f9fff9; display: flex; justify-content: space-between; align-items: center; }
+        .order-total-amount { font-size: 1.1rem; font-weight: bold; color: #1b5e20; font-family: 'Moul', cursive; }
+
+        /* ដានស្ថានភាព */
+        .status-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 20px;
+            padding: 12px 0;
+        }
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+            position: relative;
+        }
+        .status-step .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+        .status-step.active .step-dot { background: #2e7d32; color: white; box-shadow: 0 0 0 4px rgba(46,125,50,0.2); }
+        .status-step.done .step-dot { background: #4caf50; color: white; }
+        .status-step .step-label { font-size: 0.75rem; color: #888; text-align: center; }
+        .status-step.active .step-label { color: #2e7d32; font-weight: bold; }
+        .status-step.done .step-label { color: #4caf50; }
+
+        .status-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: calc(50% + 18px);
+            width: calc(100% - 36px);
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        .status-step.done:not(:last-child)::after { background: #4caf50; }
+        .status-step.active:not(:last-child)::after { background: linear-gradient(to right, #4caf50, #e0e0e0); }
+
+        .no-orders {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .no-orders .icon { font-size: 4rem; margin-bottom: 15px; }
+        .no-orders h3 { color: #4f5d4f; margin-bottom: 10px; }
+        .no-orders p { margin-bottom: 20px; }
+        .no-orders a { display: inline-block; background: #2e7d32; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: background 0.3s; }
+        .no-orders a:hover { background: #1b5e20; }
+
+        .not-logged-in {
+            text-align: center;
+            padding: 60px 20px;
+            color: #e65100;
+        }
+        .not-logged-in .icon { font-size: 4rem; margin-bottom: 15px; }
+        .not-logged-in h3 { color: #c62828; margin-bottom: 10px; }
+        .not-logged-in p { margin-bottom: 20px; color: #4f5d4f; }
+        .not-logged-in a { display: inline-block; background: #2e7d32; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: background 0.3s; }
+        .not-logged-in a:hover { background: #1b5e20; }
+
+        .promo-badge { display: inline-block; background: #fce4ec; color: #c62828; padding: 2px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: bold; margin-left: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">ហាងតែធម្មជាតិ</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="services.html">PRICE AND MENU</a></li>
+                <li><a href="reviews.html">⭐ REVIEWS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li id="nav-login-item"><a href="login.html" class="nav-login-btn">ចូលប្រើប្រាស់</a></li>
+                <li id="nav-logout-item" style="display:none;"><span class="nav-user-info" id="nav-user-name"></span><a href="#" class="nav-logout-btn" onclick="doLogout(event)">ចាកចេញ</a></li>
+                <li id="nav-admin-item" style="display:none;"><a href="admin-dashboard.html" class="nav-login-btn" style="background-color:#1b5e20;">Admin</a></li>
+                <li id="nav-orders-item" style="display:none;"><a href="my-orders.html" class="nav-login-btn" style="background-color:#1565c0;">📦 ការបញ្ជាទិញ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="orders-wrapper">
+            <h2 class="orders-title">📦 ការបញ្ជាទិញរបស់ខ្ញុំ</h2>
+            <div id="ordersContent"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Natural Tea Shop. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+    </footer>
+
+    <script>
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userRole = localStorage.getItem('userRole');
+        const currentUser = localStorage.getItem('currentUser');
+
+        // ===== Auth Nav =====
+        (function() {
+            if (isLoggedIn) {
+                document.getElementById('nav-login-item').style.display = 'none';
+                document.getElementById('nav-logout-item').style.display = 'inline-flex';
+                document.getElementById('nav-user-name').textContent = currentUser ? currentUser.split('@')[0] : '';
+                if (userRole === 'admin') document.getElementById('nav-admin-item').style.display = 'inline-flex';
+                document.getElementById('nav-orders-item').style.display = 'inline-flex';
+            }
+        })();
+
+        function doLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('currentUser');
+            alert('ចាកចេញជោគជ័យ!');
+            window.location.href = 'login.html';
+        }
+
+        // ===== ស្ថានភាព =====
+        const statusLabels = {
+            'processing': 'កំពុងដំណើរការ',
+            'shipping': 'កំពុងដឹកជញ្ជូន',
+            'delivered': 'បានដឹកជញ្ជូន',
+            'pending': 'រង់ចាំ',
+            'completed': 'រួចរាល់',
+            'active': 'កំពុងដំណើរការ'
+        };
+        const statusBadgeClass = {
+            'processing': 'badge-processing',
+            'shipping': 'badge-shipping',
+            'delivered': 'badge-delivered',
+            'pending': 'badge-pending',
+            'completed': 'badge-completed',
+            'active': 'badge-processing'
+        };
+        const statusCardClass = {
+            'processing': 'status-processing',
+            'shipping': 'status-shipping',
+            'delivered': 'status-delivered',
+            'pending': 'status-pending',
+            'completed': 'status-delivered',
+            'active': 'status-processing'
+        };
+
+        // ===== ដានស្ថានភាព =====
+        function getStatusSteps(status) {
+            const steps = ['processing', 'shipping', 'delivered'];
+            const currentStep = steps.indexOf(status);
+            if (status === 'pending' || status === 'active') return steps.map((s, i) => ({ key: s, state: i === 0 ? 'active' : '' }));
+            if (status === 'completed') return steps.map(s => ({ key: s, state: 'done' }));
+            return steps.map((s, i) => ({ key: s, state: i <= currentStep ? (i === currentStep ? 'active' : 'done') : '' }));
+        }
+
+        const stepLabels = {
+            'processing': 'កំពុងដំណើរការ',
+            'shipping': 'កំពុងដឹកជញ្ជូន',
+            'delivered': 'បានដឹកជញ្ជូន'
+        };
+        const stepIcons = {
+            'processing': '⏳',
+            'shipping': '🚚',
+            'delivered': '📦'
+        };
+
+        // ===== បង្ហាញការបញ្ជាទិញ =====
+        function renderOrders() {
+            const container = document.getElementById('ordersContent');
+
+            if (!isLoggedIn) {
+                container.innerHTML = `
+                    <div class="not-logged-in">
+                        <div class="icon">🔒</div>
+                        <h3>សូមចូលប្រើប្រាស់មុន</h3>
+                        <p>អ្នកត្រូវចូលប្រើប្រាស់ដើម្បីមើលការបញ្ជាទិញរបស់អ្នក។</p>
+                        <a href="login.html">🔐 ចូលប្រើប្រាស់</a>
+                    </div>`;
+                return;
+            }
+
+            const allOrders = JSON.parse(localStorage.getItem('ntOrders') || '[]');
+            const myOrders = allOrders.filter(o => o.user === currentUser);
+
+            if (myOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <div class="icon">📭</div>
+                        <h3>មិនទាន់មានការបញ្ជាទិញទេ</h3>
+                        <p>អ្នកមិនទាន់មានការបញ្ជាទិញណាមួយទេ។ សូមទិញផលិតផលឥឡូវ!</p>
+                        <a href="services.html">🍵 មើលបញ្ជីម៉ឺនុយ</a>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            myOrders.reverse().forEach(o => {
+                const cardClass = statusCardClass[o.status] || 'status-processing';
+                const badgeClass = statusBadgeClass[o.status] || 'badge-processing';
+                const label = statusLabels[o.status] || o.status;
+
+                html += `<div class="order-card ${cardClass}">`;
+                html += `<div class="order-card-header">
+                    <h3>🧾 ការបញ្ជាទិញ ${o.id}</h3>
+                    <span class="order-status-badge ${badgeClass}">${label}</span>
+                </div>`;
+
+                // ដានស្ថានភាព
+                const steps = getStatusSteps(o.status);
+                html += `<div class="status-tracker">`;
+                steps.forEach(s => {
+                    html += `<div class="status-step ${s.state}">
+                        <div class="step-dot">${stepIcons[s.key]}</div>
+                        <div class="step-label">${stepLabels[s.key]}</div>
+                    </div>`;
+                });
+                html += `</div>`;
+
+                html += `<div class="order-card-body">`;
+                html += `<div class="order-info-row"><span class="order-info-label">កាលបរិច្ឆេទ:</span><span class="order-info-value">${o.date || '-'} ${o.time || ''}</span></div>`;
+                html += `<div class="order-info-row"><span class="order-info-label">ឈ្មោះ:</span><span class="order-info-value">${o.customer}</span></div>`;
+                if (o.phone) html += `<div class="order-info-row"><span class="order-info-label">ទូរស័ព្ទ:</span><span class="order-info-value">${o.phone}</span></div>`;
+                if (o.address) html += `<div class="order-info-row"><span class="order-info-label">អាសយដ្ឋាន:</span><span class="order-info-value">${o.address}</span></div>`;
+
+                if (o.items && o.items.length) {
+                    html += `<table class="order-items-table"><thead><tr><th>ឈ្មោះ</th><th>ចំនួន</th><th>តម្លៃ</th><th>សរុប</th></tr></thead><tbody>`;
+                    o.items.forEach(item => {
+                        html += `<tr><td>${item.name}</td><td>${item.qty}</td><td>៛${item.price.toLocaleString()}</td><td>៛${(item.price * item.qty).toLocaleString()}</td></tr>`;
+                    });
+                    html += `</tbody></table>`;
+                }
+
+                html += `</div>`;
+
+                html += `<div class="order-card-footer">`;
+                if (o.promoCode) html += `<span class="promo-badge">🎁 ${o.promoCode}</span>`;
+                else html += `<span></span>`;
+                html += `<span class="order-total-amount">សរុប: ${o.amount}</span>`;
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        renderOrders();
+    </script>
+</body>
+</html>

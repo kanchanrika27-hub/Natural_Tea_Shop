@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ចូលប្រើប្រាស់ - Natural Tea Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .form-error { color: #c62828; font-size: 0.85rem; margin-top: 4px; display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">ហាងតែធម្មជាតិ</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="services.html">PRICE AND MENU</a></li>
+                <li><a href="reviews.html">⭐ REVIEWS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="auth-container">
+            <h2>ចូលប្រើប្រាស់គណនី</h2>
+
+            <!-- ផ្ទាំងប្តូររវាងអ៊ីមែល និងអេតមី -->
+            <div class="login-tabs">
+                <div class="login-tab active" onclick="switchTab('email')" id="tab-email">📧 ចូលតាមអ៊ីមែល</div>
+                <div class="login-tab" onclick="switchTab('atm')" id="tab-atm">💳 ចូលតាមអេតមី (ATM)</div>
+            </div>
+
+            <!-- ការចូលតាមអ៊ីមែល -->
+            <div class="tab-content active" id="content-email">
+                <form id="loginFormEmail">
+                    <div class="form-group">
+                        <label for="email">អាសយដ្ឋាន អ៊ីមែល (Email):</label>
+                        <input type="email" id="email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">ពាក្យសម្ងាត់ (Password):</label>
+                        <input type="password" id="password" placeholder="បញ្ចូលពាក្យសម្ងាត់" required>
+                    </div>
+                    <div id="loginError" class="form-error"></div>
+                    <button type="submit" class="auth-btn">ចូលប្រើប្រាស់</button>
+                </form>
+                <div class="test-info">
+                    <strong>🔑 គណនីសម្រាប់សាកល្បង៖</strong><br>
+                    • User: <code>user@gmail.com</code> | <code>123456</code><br>
+                    • Admin: <code>admin@teashop.com</code> | <code>admin123</code>
+                </div>
+            </div>
+
+            <!-- ការចូលតាមអេតមី — មិនអាចបើកបាន (Disabled) -->
+            <div class="tab-content" id="content-atm">
+                <div class="atm-disabled-section">
+                    <div class="atm-disabled-overlay">
+                        <span>🚫 ការចូលតាមអេតមីមិនទាន់អាចប្រើប្រាស់បានទេ</span>
+                    </div>
+                    <div class="atm-form-elements">
+                        <div class="form-group">
+                            <label for="atmBank">ជ្រើសរើសធនាគារ:</label>
+                            <select id="atmBank">
+                                <option value="">-- ជ្រើសរើសធនាគារ --</option>
+                                <option value="ABA">ABA Bank</option>
+                                <option value="ACLEDA">ACLEDA Bank</option>
+                                <option value="Wing">Wing Bank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="atmCard">លេខកាតអេតមី (Card Number):</label>
+                            <input type="text" id="atmCard" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <label for="atmPin">លេខសម្ងាត់កាត (PIN):</label>
+                            <input type="password" id="atmPin" placeholder="បញ្ចូលលេខ PIN" maxlength="4">
+                        </div>
+                        <button type="button" class="auth-btn" disabled>ចូលប្រើប្រាស់</button>
+                    </div>
+                </div>
+                <div class="test-info-atm">
+                    <strong>⚠️ ជូនដំណឹង:</strong> ការចូលតាមកាតអេតមីកំពុងតែអភិវឌ្ឍន៍ និងមិនទានងអាចប្រើប្រាស់បានទេ។ សូមចូលតាមអ៊ីមែលជំនួសវិញ។
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                មិនទាន់មានគណនីមែនទេ? <a href="register.html" style="color: #2e7d32; font-weight: bold;">ចុះឈ្មោះទីនេះ</a>
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Natural Tea Shop. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if (tab === 'email') {
+                document.getElementById('tab-email').classList.add('active');
+                document.getElementById('content-email').classList.add('active');
+            } else {
+                document.getElementById('tab-atm').classList.add('active');
+                document.getElementById('content-atm').classList.add('active');
+            }
+        }
+
+        document.getElementById('loginFormEmail').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errEl = document.getElementById('loginError');
+
+            // គណនី Admin
+            if (email === 'admin@teashop.com' && password === 'admin123') {
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('currentUser', email);
+                localStorage.setItem('isLoggedIn', 'true');
+                alert('ចូលប្រើប្រាស់ជា Admin ជោគជ័យ!');
+                window.location.href = 'admin-dashboard.html';
+                return;
+            }
+
+            // គណនី User ដើម
+            if (email === 'user@gmail.com' && password === '123456') {
+                localStorage.setItem('userRole', 'user');
+                localStorage.setItem('currentUser', email);
+                localStorage.setItem('isLoggedIn', 'true');
+                alert('ចូលប្រើប្រាស់ជោគជ័យ!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // គណនីដែលចុះឈ្មោះថ្មី (localStorage)
+            const users = JSON.parse(localStorage.getItem('ntUsers') || '[]');
+            const found = users.find(u => u.email === email && u.password === password);
+            if (found) {
+                localStorage.setItem('userRole', found.role || 'user');
+                localStorage.setItem('currentUser', email);
+                localStorage.setItem('isLoggedIn', 'true');
+                alert('ចូលប្រើប្រាស់ជោគជ័យ!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // លិបិក្រ័យបរាជ័យ
+            errEl.textContent = '⚠️ អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ! សូមព្យាយាមម្តងទៀត ឬចុះឈ្មោះថ្មី។';
+            errEl.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

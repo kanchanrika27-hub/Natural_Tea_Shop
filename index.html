@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Tea Shop - ហាងតែធម្មជាតិ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">ហាងតែធម្មជាតិ</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="services.html">PRICE AND MENU</a></li>
+                <li><a href="reviews.html">⭐ REVIEWS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li id="nav-login-item"><a href="login.html" class="nav-login-btn">ចូលប្រើប្រាស់</a></li>
+                <li id="nav-logout-item" style="display:none;"><span class="nav-user-info" id="nav-user-name"></span><a href="#" class="nav-logout-btn" onclick="doLogout(event)">ចាកចេញ</a></li>
+                <li id="nav-admin-item" style="display:none;"><a href="admin-dashboard.html" class="nav-login-btn" style="background-color:#1b5e20;">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="home-container">
+            <div class="home-text">
+                <h1>ស្វាគមន៍មកកាន់<br>ហាងតែធម្មជាតិ</h1>
+                <p style="font-size:1.1rem; color:#4f5d4f; margin-top:15px;">រីករម្យន៍ការទទួលទានតែថ្លៃថ្លាដែលមានគុណភាពខ្ពស់ និងបរិស្ថានធម្មជាតិ ដែលមិនមានជាតិគីមីឡើយ។</p>
+                <a href="services.html" class="btn">មើលបញ្ជីតម្លៃ</a>
+            </div>
+            <div class="home-image">
+                <img src="images/home-tea.jpg" alt="Natural Tea" class="featured-img">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Natural Tea Shop. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+    </footer>
+
+    <script>
+        (function() {
+            const logged = localStorage.getItem('isLoggedIn') === 'true';
+            const role = localStorage.getItem('userRole');
+            const user = localStorage.getItem('currentUser');
+
+            if (logged) {
+                document.getElementById('nav-login-item').style.display = 'none';
+                document.getElementById('nav-logout-item').style.display = 'inline-flex';
+                document.getElementById('nav-user-name').textContent = user ? user.split('@')[0] : '';
+                if (role === 'admin') {
+                    document.getElementById('nav-admin-item').style.display = 'inline-flex';
+                }
+            }
+        })();
+
+        function doLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('currentUser');
+            alert('ចាកចេញជោគជ័យ!');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
