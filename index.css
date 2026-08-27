@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Khmer&family=Moul&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Khmer', sans-serif; }
+body { background-color: #f7faf7; color: #2d3a2d; display: flex; flex-direction: column; min-height: 100vh; }
+
+header { background-color: #ffffff; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-bottom: 3px solid #4caf50; }
+.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
+.logo { font-family: 'Moul', cursive; color: #2e7d32; text-decoration: none; font-size: 1.4rem; }
+.nav-menu { display: flex; list-style: none; gap: 20px; flex-wrap: wrap; align-items: center; }
+.nav-menu a { text-decoration: none; color: #4f5d4f; font-weight: bold; padding: 5px 10px; border-radius: 6px; transition: all 0.3s; }
+.nav-menu a:hover, .nav-menu a.active { color: #2e7d32; background-color: #e8f5e9; }
+
+/* ប៊ូតុងចូលប្រើប្រាស់ / ចាកចេញ */
+.nav-login-btn { display: inline-block; background-color: #2e7d32; color: white; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 0.9rem; transition: background 0.3s; cursor: pointer; border: none; }
+.nav-login-btn:hover { background-color: #1b5e20; }
+.nav-logout-btn { display: inline-block; background-color: #c62828; color: white; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 0.9rem; transition: background 0.3s; cursor: pointer; border: none; }
+.nav-logout-btn:hover { background-color: #b71c1c; }
+.nav-user-info { font-size: 0.85rem; color: #2e7d32; font-weight: bold; margin-right: 10px; }
+
+/* ផ្ទាំង Login */
+.auth-container { max-width: 450px; margin: 50px auto; background: white; padding: 35px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.auth-container h2 { text-align: center; margin-bottom: 25px; color: #2e7d32; font-family: 'Moul', cursive; }
+.login-tabs { display: flex; border-bottom: 2px solid #e0e0e0; margin-bottom: 25px; }
+.login-tab { flex: 1; text-align: center; padding: 12px 0; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; color: #999; font-size: 0.95rem; }
+.login-tab:hover { color: #2e7d32; }
+.login-tab.active { color: #2e7d32; border-bottom-color: #2e7d32; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #4f5d4f; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; transition: border 0.3s; font-family: 'Khmer', sans-serif; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #2e7d32; box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+.auth-btn { display: block; width: 100%; background-color: #2e7d32; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: background 0.3s; font-family: 'Khmer', sans-serif; }
+.auth-btn:hover { background-color: #1b5e20; }
+.test-info { margin-top: 20px; padding: 14px; background: #e8f5e9; border-radius: 8px; font-size: 0.85rem; color: #333; }
+.test-info-atm { margin-top: 20px; padding: 14px; background: #fff3e0; border-radius: 8px; font-size: 0.85rem; color: #333; }
+.test-info code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+
+/* ATM បិទបដិសេធ */
+.atm-disabled-section { position: relative; }
+.atm-disabled-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.7); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: not-allowed; }
+.atm-disabled-overlay span { background: #c62828; color: white; padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(198,40,40,0.3); }
+.atm-form-elements { opacity: 0.4; pointer-events: none; user-select: none; }
+
+.page-content { flex: 1; margin-top: 80px; }
+.inner-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+.section-title { font-family: 'Moul', cursive; text-align: center; color: #2e7d32; margin-bottom: 40px; }
+
+/* រចនាបថរូបភាពទំព័រដើម */
+.home-container { display: flex; align-items: center; justify-content: space-between; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+.home-text { flex: 1; }
+.home-text h1 { font-family: 'Moul', cursive; color: #1b5e20; font-size: 2.2rem; line-height: 1.5; }
+.btn { display: inline-block; background-color: #2e7d32; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px; font-weight: bold; border: none; cursor: pointer; }
+.home-image { flex: 1; text-align: center; }
+.featured-img { width: 100%; max-width: 400px; height: 350px; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+/* រចនាបថរូបភាពទំព័រអំពីយើង */
+.about-card { background-color: #ffffff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); max-width: 800px; margin: 0 auto; }
+.about-img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; }
+
+/* រចនាបថរូបភាពទំព័រតម្លៃ */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.menu-item { background-color: white; border-radius: 10px; padding: 25px; border: 1px solid #e8f5e9; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.3s; }
+.menu-item:hover { transform: translateY(-5px); }
+.item-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+.price { font-size: 1.3rem; font-weight: bold; color: #1b5e20; background-color: #e8f5e9; display: inline-block; padding: 5px 15px; border-radius: 15px; margin-top: 10px; }
+
+/* ទំព័រទំនាក់ទំនង */
+.contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.contact-info p { margin-bottom: 12px; font-size: 1rem; }
+.contact-form .form-group { margin-bottom: 15px; }
+
+footer { background-color: #1b5e20; color: #e8f5e9; padding: 20px; text-align: center; margin-top: auto; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container { flex-direction: column; align-items: flex-start; }
+    .nav-menu { flex-direction: column; width: 100%; gap: 10px; }
+    .home-container { flex-direction: column; text-align: center; }
+    .contact-wrapper { grid-template-columns: 1fr; }
+    .menu-grid { grid-template-columns: 1fr; }
+}
